@@ -1,0 +1,12 @@
+name: cleanup
+description: 'Cleanup docker and other build resources'
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        REPOSITORY=${REPOSITORY:-$IMAGE_NAME}
+        docker image ls
+        echo "Removing image: ${REPOSITORY}:${IMAGE_TAG}"
+        DOCKER_BUILDKIT=1 docker rmi --force "${REPOSITORY}:${IMAGE_TAG}" || true
+        docker image ls
