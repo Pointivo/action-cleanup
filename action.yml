@@ -6,7 +6,12 @@ runs:
     - shell: bash
       run: |
         REPOSITORY=${REPOSITORY:-$IMAGE_NAME}
+        df -h
         docker image ls
         echo "Removing image: ${REPOSITORY}:${IMAGE_TAG}"
         DOCKER_BUILDKIT=1 docker rmi --force "${REPOSITORY}:${IMAGE_TAG}" || true
         docker image ls
+        df -h
+        docker images -f dangling=true
+        docker builder prune -f --filter "until=120h"
+        df -h
