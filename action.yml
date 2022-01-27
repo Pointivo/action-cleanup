@@ -20,5 +20,5 @@ runs:
         df -h
         
         echo "Remove old builder cache"
-        docker builder prune -f --filter "dangling=true"
+        docker builder prune -f --filter "until=120h"
         df -h
