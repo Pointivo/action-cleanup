@@ -7,11 +7,18 @@ runs:
       run: |
         REPOSITORY=${REPOSITORY:-$IMAGE_NAME}
         df -h
+        
         docker image ls
-        echo "Removing image: ${REPOSITORY}:${IMAGE_TAG}"
-        DOCKER_BUILDKIT=1 docker rmi --force "${REPOSITORY}:${IMAGE_TAG}" || true
+        IMAGE_IDS=$(docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | uniq -u | awk '{printf "%s ", $1}')
+        echo "Removing IMAGE ID(s)=${IMAGE_IDS}"
+        DOCKER_BUILDKIT=1 docker rmi --force "${IMAGE_IDS}" || true
         docker image ls
         df -h
-        docker images -f dangling=true
-        docker builder prune -f --filter "until=120h"
+        
+        echo "Remove Dangling..."
+        docker images -f dangling=true | grep -v "IMAGE" | awk '{print $3}' | xargs docker rmi -f
+        df -h
+        
+        echo "Remove old builder cache"
+        docker builder prune -f --filter "dangling=true"
         df -h
