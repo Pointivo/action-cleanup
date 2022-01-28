@@ -9,7 +9,7 @@ runs:
         df -h
         
         docker image ls
-        IMAGE_IDS=$(docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | uniq -u | awk '{printf "%s ", $1}')
+        IMAGE_IDS=$(docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | sort -u | awk '{printf "%s ", $1}')
         echo "Removing IMAGE ID(s)=${IMAGE_IDS}"
         DOCKER_BUILDKIT=1 docker rmi --force "${IMAGE_IDS}" || true
         docker image ls
