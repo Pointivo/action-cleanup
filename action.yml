@@ -16,7 +16,7 @@ runs:
         df -h
         
         echo "Remove Dangling..."
-        docker images -f dangling=true | grep -v "IMAGE" | awk '{print $3}' | xargs docker rmi -f
+        docker images -f dangling=true | grep -v "IMAGE" | awk '{print $3}' | xargs docker rmi -f || true
         df -h
         
         echo "Remove old builder cache"
