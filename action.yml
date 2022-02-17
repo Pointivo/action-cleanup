@@ -8,15 +8,13 @@ runs:
         REPOSITORY=${REPOSITORY:-$IMAGE_NAME}
         df -h
         
-        docker image ls
-        IMAGE_IDS=$(docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | sort -u | awk '{printf "%s ", $1}')
-        echo "Removing IMAGE ID(s)=${IMAGE_IDS}"
-        DOCKER_BUILDKIT=1 docker rmi --force "${IMAGE_IDS}" || true
-        docker image ls
+        docker image -a
+        docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | sort -u | xargs -r docker rmi -f
+        docker image -a
         df -h
         
         echo "Remove Dangling..."
-        docker images -f dangling=true | grep -v "IMAGE" | awk '{print $3}' | xargs -r docker rmi -f || true
+        docker images -f dangling=true | grep -v "IMAGE" | awk '{print $3}' | xargs -r docker rmi -f
         df -h
         
         echo "Remove old builder cache"
