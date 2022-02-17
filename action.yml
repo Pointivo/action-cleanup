@@ -8,9 +8,9 @@ runs:
         REPOSITORY=${REPOSITORY:-$IMAGE_NAME}
         df -h
         
-        docker image -a
+        docker images -a
         docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | sort -u | xargs -r docker rmi -f
-        docker image -a
+        docker images -a
         df -h
         
         echo "Remove Dangling..."
