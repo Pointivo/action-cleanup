@@ -9,12 +9,12 @@ runs:
         df -h
         
         docker images -a
-        docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | sort -u | xargs -r docker rmi -f
+        docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | sort -u | xargs -r docker rmi -f || true
         docker images -a
         df -h
         
         echo "Remove Dangling..."
-        docker images -f dangling=true | grep -v "IMAGE" | awk '{print $3}' | xargs -r docker rmi -f
+        docker images -f dangling=true | grep -v "SIZE" | awk '{print $3}' | xargs -r docker rmi -f || true
         df -h
         
         echo "Remove old builder cache"
