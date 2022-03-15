@@ -9,7 +9,7 @@ runs:
         df -h
         
         docker images -a
-        docker images -a | grep "${IMAGE_TAG}" | awk '{print $3}' | sort -u | xargs -r docker rmi -f || true
+        docker images -a | grep "${REPOSITORY" | grep "${IMAGE_TAG}" | awk '{print $3}' | sort -u | xargs -r docker rmi -f || true
         docker images -a
         df -h
         
